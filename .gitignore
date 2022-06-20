@@ -1,0 +1,5 @@
+*.pyc
+build
+dist
+sql_mongo_cli.egg-info
+
