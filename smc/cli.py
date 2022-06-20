@@ -15,7 +15,8 @@ class Command:
             SHOW_DBS: cls.show_dbs,
             SHOW_COLS: cls.show_cols,
             USE_DB: cls.use_dbs,
-            SELECT: cls.select
+            SELECT: cls.select,
+            DELETE: cls.delete
         }
         cls.db = None
 
@@ -64,9 +65,17 @@ class Command:
 
     @classmethod
     def delete(cls, q, mongo_client):
-        # delete from table where key='foo'
+        # delete from table where key=foo
         col_name = q.split()[2]
         cond = q.split()[-1]
+        key = cond.split("=")[0]
+        val = cond.split("=")[-1]
+        q = {key: val}
+
+        db = mongo_client[cls.db]
+        col = db[col_name]
+        col.delete_one(q)
+        print(f"deleted {q}")
 
 
 def main():
